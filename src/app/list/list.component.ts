@@ -1,20 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { StoreService } from '../store.service';
 
 @Component({
   selector: 'app-list',
   template: `
-    <p>
-      list works!
-    </p>
+    <ul>
+      <li *ngFor="let todo of store.todos$ | async">{{ todo.todo }}</li>
+    </ul>
   `,
-  styles: [
-  ]
+  styles: [],
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
+  subscriptions!: Subscription;
 
-  constructor() { }
+  constructor(public store: StoreService) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.subscriptions = this.store.getToDoList().subscribe();
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 }

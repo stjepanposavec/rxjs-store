@@ -1,20 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { StoreService } from '../store.service';
 
 @Component({
   selector: 'app-add',
   template: `
-    <p>
-      add works!
-    </p>
+    <form [formGroup]="todoForm" (ngSubmit)="onClickAdd()">
+      <input type="text" formControlName="todo" />
+      <button>Add</button>
+    </form>
   `,
-  styles: [
-  ]
+  styles: [],
 })
-export class AddComponent implements OnInit {
+export class AddComponent implements OnInit, OnDestroy {
+  subscriptions!: Subscription;
 
-  constructor() { }
+  constructor(private fb: FormBuilder, private store: StoreService) {}
 
-  ngOnInit(): void {
+  todoForm = this.fb.group({
+    todo: ['', [Validators.required]],
+  });
+
+  ngOnInit(): void {}
+
+  onClickAdd() {
+    this.subscriptions = this.store
+      .addToDoToList({ id: 2, todo: this.todoForm.get('todo')?.value })
+      .subscribe();
+    this.todoForm.get('todo')?.setValue('');
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 }

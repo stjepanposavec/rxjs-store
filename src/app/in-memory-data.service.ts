@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
 export interface ToDo {
-  id: string;
+  id: number;
   todo: string;
 }
 
@@ -11,7 +11,7 @@ export interface ToDo {
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    const todos: ToDo[] = [{ id: '1', todo: 'test' }];
+    let todos: ToDo[] = [{ id: 1, todo: 'test' }];
     return { todos };
   }
 }
