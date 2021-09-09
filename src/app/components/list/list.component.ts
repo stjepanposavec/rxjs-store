@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { StoreService } from '../store.service';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-list',
